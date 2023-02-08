@@ -98,9 +98,9 @@ setMethod("stack", signature(x='RasterList'),
 			}
 			
 			nn <- lapply(X=l,FUN=names) ## EC 20230207
-			nn00 <<- nn
-			snn00 <<- snn
-			l00 <<- l
+		#####nn00 <<- nn
+			####snn00 <<- snn
+			#####l00 <<- l
 			if (!is.null(nn[[1]])) {
 				
 				cond_names <- all(sapply(X=nn,FUN=identical,y=snn))
