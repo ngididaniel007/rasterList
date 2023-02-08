@@ -7,7 +7,7 @@ NULL
 #'
 #' @param x a valid object 
 #' 
-#' 
+#' @return a logical variable
 #' @export 
 #' 
 #' @examples 

@@ -3,7 +3,6 @@
 \docType{package}
 \name{RasterList-Package}
 \alias{RasterList-Package}
-\alias{RasterList-Package-package}
 \title{RasterList: A package for Rasters Where Cells are Generic Objects}
 \description{
 The aim of this package is to develop a way to make some complex operations on each
@@ -17,11 +16,13 @@ The \code{\link{RasterList-class}} is a S4 class that inherits the \code{\link{R
 so that there is bijective corrensponce between a raster cell and a list element.
 The 	RasterList package provides three categories of important functions:
 
+
 {\code{\link{rasterList}}}{: it is the constructor of a  \code{\link{RasterList-class}} object from a generic \code{object}, it also transforms a \code{\link{RasterList-class}} into another one throungh a function argument. }
 
 {\code{\link{rasterListFun}}}{: it is a function that constructs  a  particular \code{\link{RasterList-class}} object in which the objects are \code{function}-type. }
 
 {\code{\link{RasterListApply}}}{: it is a function that allows to operate among two or more \code{\link{RasterList-class}} objects defined in the same spatial extent through a generic function \code{fun(x,y,...)} where \code{x} and \code{y} are each cell/element of two \code{\link{RasterList-class}} objects given as arguments \code{x} and \code{y} of \code{\link{RasterListApply}}.}
+
 
 
 
@@ -33,10 +34,9 @@ Shraddhanand Shukla, Gregory Husak, James Rowland, Laura Harrison,
 Andrew Hoell and Joel Michaelsen.
 "The climate hazards infrared precipitation with stations - a new environmental 
 record for monitoring extremes". Scientific Data 2, 150066. doi:10.1038/sdata.2015.66 2015 , 
-\url{http://chg.geog.ucsb.edu/data/chirps/}.
+\url{https://chc.ucsb.edu/data/chirps}.
 
-The package-provided datasets shall be only used as example datasets.
+The package-provided datasets shall be only used as example datasets. 
 
 The development of this package has been sponosored by ACEWATER2 and "Water  for  Growth  and  Poverty Reduction  in  the  Mekrou" projects of the Joint Research Centre of the Europan Commission (\url{http://aquaknow.jrc.ec.europa.eu}).
 }
-

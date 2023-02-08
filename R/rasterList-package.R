@@ -28,7 +28,7 @@
 #' Andrew Hoell and Joel Michaelsen.
 #' "The climate hazards infrared precipitation with stations - a new environmental 
 #' record for monitoring extremes". Scientific Data 2, 150066. doi:10.1038/sdata.2015.66 2015 , 
-#' \url{http://chg.geog.ucsb.edu/data/chirps/}.
+#' \url{https://chc.ucsb.edu/data/chirps}.
 #' 
 #' The package-provided datasets shall be only used as example datasets. 
 #' 

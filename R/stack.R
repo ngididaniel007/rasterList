@@ -13,10 +13,13 @@
 #' @param x a \code{rasterList-class} object 
 #' @param ... further arguments for \code{\link{rasterList}}
 #' 
+#' 
 #' @rdname stack
 #' @method stack RasterList
 #' @aliases stack 
 #' @export
+#' 
+#' @return a \code{\link{RasterStack-class}} object
 #' 
 #' @importFrom raster ncell stack
 #' @importFrom methods as
@@ -56,14 +59,22 @@ setMethod("stack", signature(x='RasterList'),
 			}
 	
 			nn <- lapply(X=out@list,FUN=names)
-			snn <- nn[[1]]
-			l <- lapply(X=out@list,FUN=as.vector)
+			inn <- which(sapply(nn,FUN=length)>0) ## EC 20230207
+			if (length(inn)>0) {
+			  inn <- inn[1]
+			} else {
+			  inn <- 1
+			}
+			snn <- nn[[inn]] ## EC 20230207
+			l <- out@list ##lapply(X=out@list,FUN=as.vector) ## EC 20230207
 			lnl <- length(l)
 			nl <- sapply(X=l,FUN=length)
 	
 	#		### NULL into a vector of NAs 
 			inz <- which(nl!=0)
 			iz <-  which(nl==0)
+			
+			
 			if (max(nl[inz],na.rm=FALSE)!=min(nl[inz],na.rm=FALSE)){
 			
 				if (length(out@name)<1) out@name <- "<NO_NAME>"
@@ -75,6 +86,7 @@ setMethod("stack", signature(x='RasterList'),
 			if (length(iz)>0) {
 				
 				val_null <- array(NA,nl[inz][1])
+				names(val_null) <- snn ## EC 20230207
 				for (i in iz){
 					
 					
@@ -85,7 +97,10 @@ setMethod("stack", signature(x='RasterList'),
 				
 			}
 			
-			
+			nn <- lapply(X=l,FUN=names) ## EC 20230207
+			nn00 <<- nn
+			snn00 <<- snn
+			l00 <<- l
 			if (!is.null(nn[[1]])) {
 				
 				cond_names <- all(sapply(X=nn,FUN=identical,y=snn))

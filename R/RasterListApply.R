@@ -10,6 +10,7 @@ NULL
 #' @param FUN a function 
 #' 
 #' @export 
+#' @return a \code{\link{RasterList-class}} object
 #' 
 #' @seealso \code{\link{mapply}},\code{\link{rasterList}}
 #' 

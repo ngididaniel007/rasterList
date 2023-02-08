@@ -11,10 +11,12 @@ NULL
 #' 
 #' @export 
 #'
+#' @return a \code{\link{RasterLayer-class}} object
+#'
 #' @rdname raster
 #' @method raster RasterList
 #' @aliases raster 
-#'  
+#' @importFrom methods is
 #' @seealso \code{\link{stack}},\code{\link{RasterListApply}}
 #' @examples 
 #' 
@@ -45,7 +47,7 @@ setMethod('raster', signature(x='RasterList'),
 			sout <- sapply(X=x@list,FUN=function(x){
 						
 						o <- try(as.numeric(as.vector(x))[1],silent=TRUE)
-						if (class(o)=="try-error") o <- 1*NA
+						if (is(o,"try-error")) o <- 1*NA
 						return(o)
 					
 					}

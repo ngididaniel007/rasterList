@@ -9,6 +9,9 @@ is.RasterList(x)
 \arguments{
 \item{x}{a valid object}
 }
+\value{
+a logical variable
+}
 \description{
 Is a \code{\link{RasterList-class}} object ?
 }
@@ -26,4 +29,3 @@ is.RasterList(rr)
 
 
 }
-

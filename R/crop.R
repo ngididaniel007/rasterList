@@ -12,7 +12,7 @@ NULL
 #' 
 #' @export 
 #'
-#' 
+#' @return a "cropped" \code{\link{RasterList-class}} object
 #' @rdname crop
 #' @method crop RasterList
 #' @aliases crop 
@@ -24,7 +24,7 @@ NULL
 #' 
 #' precf <- system.file("map/precipitation.grd", package="rasterList")
 #' prec <- stack(precf)
-#' \dontrun{
+#' \donttest{
 #' ## Sample L-moments 
 #' 
 #' library(lmom)

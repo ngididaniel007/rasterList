@@ -11,6 +11,9 @@ RasterListApply(..., FUN = NULL)
 
 \item{FUN}{a function}
 }
+\value{
+a \code{\link{RasterList-class}} object
+}
 \description{
 A function for operations among  \code{\link{RasterList-class}} objects.
 }
@@ -56,4 +59,3 @@ pval_ks <- raster(kstesting,FUN=function(x){x$p.value})
 \seealso{
 \code{\link{mapply}},\code{\link{rasterList}}
 }
-

@@ -22,7 +22,7 @@ NULL
 #' coordinates(meuse) <- ~x+y
 #' gridded(meuse.grid) <- TRUE
 #' 
-#' \dontrun{
+#' \donttest{
 #' soilmap <- stack(meuse.grid)[['soil']]
 #' elevmap <- rasterize(x=meuse,y=soilmap,field="elev",fun=mean)
 #' soilparcsv <- system.file("external/soil_data.csv",package="soilwater")
