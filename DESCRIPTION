@@ -11,7 +11,7 @@ Description: A S4 class has been created such that complex operations can be
     map of precipitation and creation of a raster map of soil water retention curves
     have been presented.
 Version: 0.5.15
-Date: 2023-02-03
+Date: 2023-02-08
 Repository: CRAN
 Depends: R(>= 3.0.1),raster,methods
 Suggests: lmom,testthat,sp,soilwater,lubridate
