@@ -16,7 +16,8 @@ context("Verify cropping a RasterList")
 ## UNDER DEVOLOPMENT
 
 
-precf <- system.file("map/precipitation.grd", package="rasterList")
+##precf <- system.file("map/precipitation.grd", package="rasterList")
+precf <- system.file("map/Mekrou_precipitation.grd", package="rasterList")
 prec <- stack(precf)
 ## Sample L-moments 
 

@@ -22,7 +22,7 @@ NULL
 #' @examples 
 #' 
 #' 
-#' precf <- system.file("map/precipitation.grd", package="rasterList")
+#' precf <- system.file("map/Mekrou_precipitation.grd", package="rasterList")
 #' prec <- stack(precf)
 #' \donttest{
 #' ## Sample L-moments 

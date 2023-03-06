@@ -15,9 +15,9 @@ context("Verfiy Probabibilty Distribution")
 
 ## It is Raster Examples:
 
-precf <- system.file("map/precipitation.grd", package="rasterList")
+##precf <- system.file("map/precipitation.grd", package="rasterList")
 
-prec <- stack(precf)
+##prec <- stack(precf)
 
 ### Or you can use Mekrou examples: 
 ## Yearly Precipitaion on Mecrow
