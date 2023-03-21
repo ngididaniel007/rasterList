@@ -1,5 +1,5 @@
 ---
-title: "Analysis with Raster Data Using R and rasterList Package: saving functions ot any kind of data in a grid cell"
+title: "Analysis with Raster Data Using R and rasterList Package: saving any kind of data in a grid cell"
 author: "Emanuele Cordano"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -28,35 +28,38 @@ knitr::opts_chunk$set(
 
 
 The __rasterList__ package has been developed to create a S4 class object that can manage complex
-operations and objects in a spatially gridded map, i.e. a raster map. The _rasterList-Class_ (@rasterList) object differs from a traditional raster map by the fact that each cell can contain a generic object instead of numeric values on one or more  bands or layers. The raster of objects,i.e. the RasterList-Class object, consits on a _rasterLayer-Class_  (@raster) connected to a generic list: one list element for each raster cells. It allows to write few lines of R code for complex  map algebra. Furthermore, in accordance with the existing classes defined in the R environment, each cell of the raster is "occupied" by an an istanced object. This may be of utitily  plenty in most applications, e.g. environmental modellig. 
+operations and objects in a spatially gridded map, i.e. a raster map. The _rasterList-Class_ (@rasterList) object differs from a traditional raster map by the fact that each cell can contain a generic object instead of numeric values on one or more  bands or layers. The raster of objects,i.e. the RasterList-Class object, consits on a _rasterLayer-Class_  (@raster) connected to a generic list: one list element for each raster cells. It allows to write few lines of R code for complex  map algebra. Furthermore, in accordance with the existing classes defined in the R environment, each cell of the raster is "occupied" by an an istanced object. This may be of big utility  in most applications, e.g. environmental modelig. 
 
 ## Introduction
 
 Nowadays the availability of spatially gridded coverages , often obtained by distributed biophysical/environmental models or remote sensed observations (e. g. CHIRPS rainfall (@chirps2015)), leads to the fact  that  normal operations on time series analysis and statistics must be replicated  in each pixel or cell of the spatially gridded domain (raster). 
 Based on _raster_ package (@raster), a S4 class has been created such that results of complex operations or speficfic R (e.g, S3 or S4)  objects can be executed on each cells of a raster map. The raster of objects contains the traditional raster map with the addition of a list of generic objects: one
-object for each raster cells. In such a way,  different kinds of objects, e.g. the probability distrubution of the mapped random variable or an _htest_, _lm_ ,_glm_ or _function_ class objects (@Hastie1992a,@Hastie1992b), can be saved for each cell, in order that the user can save intermediate results without loosing any  geographic information. This new oblect class  is implemented in a new packge __RasterList__. Two  applications are  presented: 
+object for each raster cells. In such a way,  different kinds of objects, e.g. the probability distrubution of the mapped random variable or an _htest_, _lm_ ,_glm_ or _function_ class objects (@Hastie1992a,@Hastie1992b), can be saved for each cell, in order that the user can save intermediate results without loosing any  geographic information. This new object class  is implemented in a new package __RasterList__. Two  applications are  presented: 
 
- * Creation of a 2D/3D modelled map of  soil water retention curve based on existing soil properties map and state-of-art empirical formulation (e.g. @VanGenuchten1980);
- * Processing spatial gridded datasets of daily or momthly precipitation (e. g. @chirps2015) for a trend or frequancy analysis (estimation of the return period of critical events).
+ * Creation of a 2D/3D modeled map of  soil water retention curve based on existing soil properties map and state-of-art empirical formulation (e.g. @VanGenuchten1980);
+ * Processing spatial gridded datasets of daily or monthly precipitation (e. g. @chirps2015) for a trend or frequancy analysis (estimation of the return period of critical events).
 
 
 ## Application 1 
 
-The application 1 is the estimation of the mathematical reletionships between soil water content $\theta$ and soil water pressure $\psi$, i.e. soil water retention curve. Soil water retention curve is widely used in subsurface water/groundwater hydrological modeling because it allows to close the water balance equation. Generally some theoretical formulas are used to model this curve in function of soil properties. In this examples, given a raster map  of soil properties, a map of soil water retention curves is produced.
+The application 1 is the estimation of the mathematical relationships between soil water content $\theta$ and soil water pressure $\psi$, i.e. soil water retention curve. Soil water retention curve is widely used in subsurface water/groundwater hydrological modeling because it allows to close the water balance equation. Generally some theoretical formulas are used to model this curve in function of soil properties. In this examples, given a raster map  of soil properties, a map of soil water retention curves is produced.
 First of all, in absence of detailed soil information (see also the use in @kollet2017), soil water curve is defined with the following empirical formula (@VanGenuchten1980): 
 
 $$\theta = \theta_{res}+(\theta_{sat}-\theta_{res})*(1+ |\alpha \psi|^n)^{-m} \qquad \psi \leq 0$$
 $$\theta = \theta_{sat} \qquad \psi>0$$
 
-where $\theta$ is the volumetric water content (e.g. water volume per soil volume) which ranges between residual water content $\theta_{res}$ and saturated water content $\theta_{sat}$. $\alpha$,$n$ and $m$ are parameters assuming to be depend on soil type. An estimation of the parameter $\theta_{sat}$,$\theta_{res}$,$\alpha$,$m$,$n$ value  in function of soil type is given  through the following table: 
+where $\theta$ is the volumetric water content (e.g. water volume per soil volume) which ranges between residual water content $\theta_{res}$ and saturated water content $\theta_{sat}$. $\alpha$,$n$ and $m$ are parameters assuming to be depend on soil type. An estimation of the parameter $\theta_{sat}$,$\theta_{res}$,$\alpha$,$m$,$n$ value  in function of soil type is given  through the following table (@Maidment1993): 
 ```{r eval=TRUE,fig.width=7}
 library(soilwater)
 library(stringr)
 soilparcsv <- system.file("external/soil_data.csv",package="soilwater")
 soilpar <- read.table(soilparcsv,stringsAsFactors=FALSE,header=TRUE,sep=",")
+knitr::kable(soilpar,caption="Average value of Van Genuchten's parameter per each soil type")
+```
+```{r eval=TRUE,fig.width=7}
 soilpar$color <- str_sub(rainbow(nrow(soilpar)),end=7)  ## Only first 7 characters of HTML code is considered.
 ```
-It it is assumed that each cell of a raster maps has its own soil water retention curve. Therefore to map the soil water retion curve and not only its parametes, __RasterList__ package is loaded: 
+It it is assumed that each cell of a raster maps has its own soil water retention curve. Therefore to map the soil water retention curve and not only its parameters, __RasterList__ package is loaded: 
 ```{r eval=TRUE,fig.width=7}
 library(rasterList)
 ```
@@ -68,7 +71,7 @@ help(meuse)
 data(meuse.grid)
 help(meuse.grid)
 ```
-A soil map is avaialbe from soil type according to the 1:50 000 soil map of the Netherlands. In the Meuse site, the following soil type are present   
+A soil map is available from soil type according to the 1:50 000 soil map of the Netherlands. In the Meuse site, the following soil type are present   
 
 * 1 = Rd10A (Calcareous weakly-developed meadow soils, light sandy clay); 
 * 2 = Rd90C/VII (Non-calcareous weakly-developed meadow soils, heavy sandy clay to light clay); 
@@ -113,7 +116,7 @@ addLegend(position="bottomright",colors=soilpar_s$color,labels=soilpar_s$type,ti
 
 leaf2
 ```
-Therefore, a map of each @VanGenuchten1980's formula parameter can be obtained as follow (The names of saturated and residual water contents _swc_ and _rwc_ mean $\theta_{sat}$ and $theta_{res}$ according to the the arguments of _swc_  function of __soilwater__ package (@soilwater))
+Therefore, a map of each @VanGenuchten1980's formula parameter can be obtained as follows (The names of saturated and residual water contents _swc_ and _rwc_ mean $\theta_{sat}$ and $theta_{res}$ according to the the arguments of _swc_  function of __soilwater__ package (@soilwater))
 ```{r eval=TRUE,fig.width=7}
 
 soil_parameters_f <- function (soiltype,sp=soilpar_s) {
@@ -136,7 +139,7 @@ color <- colorNumeric("Greens",domain=theta_sat[])
 leaf3 <- leaf1 %>% addRasterImage(theta_sat,color=color,opacity=opacity) %>% 
 addLegend(position="bottomright",pal=color,values=theta_sat[],opacity=opacity,title="Porosity")
 ```
-Let consider 3 point of interest in the Meuse located (latitude and logitude) as follows:
+Let consider 3 points of interest in the Meuse located (latitude and logitude coordinates) as follows:
 ```{r eval=TRUE, fig.width=7}
 lat <- 50.961532+c(0,0,0.02)
 lon <-  5.724514+c(0,0.01,0.0323)
@@ -159,7 +162,7 @@ where _icell_ is a vector of integer numbers corresponding to the cells of the a
 ```{r eval=TRUE,fig.width=7}
 soil_parameters[points$icell]
 ```
-Using _swc_ , a function that given the soil parameters returns a soil water function is defined as follows:
+Using _swc_ , a function that returns a soil water function from soil parameters is defined as follows:
 ```{r eval=TRUE,fig.width=7}
 library(soilwater)
 
@@ -206,7 +209,7 @@ soil_water_content <- stack(swc_rlf(psi))
 names(soil_water_content) <- names(psi)
 plot(soil_water_content,main=names(psi))
 ```
-Finally, assuming that $\psi$ may vary with space ranging between -0.5 m and -1.5 m with a spatial parabolid-like profile centred in point A, a map for $\psi$ is calculated as follows:
+Finally, assuming that $\psi$ may vary with space ranging between -0.5 m and -1.5 m with a spatial paraboloid-like profile centered in point A, a map for $\psi$ is calculated as follows:
 ```{r eval=TRUE,fig.width=7,warings=TRUE}
 region <- raster(swc_rlf(0))
 mask <- !is.na(region)
@@ -264,7 +267,8 @@ precf <- '/home/ecor/local/rpackages/jrc/rasterList/inst/map/cajamarca_monthly_p
 
 prec0 <- stack(precf0)
 prec <- aggregate(prec0,fact=2,na.rm=TRUE,fun=mean,filename=precf,overwrite=TRUE)
-
+####
+precf <- system.file("map/cajamarca_monthly_precipitation.grd", package="rasterList")
 
 ```
 Total annual precipitation can be computed through an aggregation of monthly data with a _sum_ function aggregation and _lubridate_ package (@lubridate).
@@ -362,7 +366,7 @@ lsl <- as.list(prec_sum_sens_slope@list[pts$icell])
 names(lsl) <- pts$label
 lsl
 ```
-From test results, in Cajamarca and Angoteros mean annual precipitation has no significant trend (i.e. p-value is greater that the accepted eual or lower thenthe significance of  0.05) whereas a trend results in Imaza and Iquitos. A graphical representation of mean annaual precipitation with trend and a web map of trend in all area are available below:
+From test results (null hypothesis: zero trend with time) , in Cajamarca (CJA) annual precipitation has no significant non-zero trend (p-value is greater than  0.05) whereas a trend versus time looks insigicant and can be accepted only if increasing the tests significance (p-value is greater than 0.1) in Imaza (IMZ). A graphical representation of mean annual precipitation and a web map of precipitation trend in all area are available below:
 ```{r eval=TRUE,fig.width=7}
   
   library(gridExtra)
@@ -425,7 +429,7 @@ leaf_trend <- leaf %>% addRasterImage(r,opacity=opacity,color=color) %>% addLege
 
 leaf_trend %>% addMarkers(lng=pts$lon,lat=pts$lat,label=sprintf("%10.2f mm/year at %s",r[pts$icell], pts$label))
 ```
-Analyzing from data, precipitation trend is greater than 0 in the inner part of the Amazon Rainforest.  For further datails, assuming that rainfall is more useful during the vegetative season which corresponds to the most rainy months of year, the analysis is replied using the mean monthly precipitation of the 3 most rainy months per each year. The aggregation is done by inserting this new aggregation function as _FUN_ argument of the _rasterList_ function: 
+Analyzing from data, precipitation trend is greater than 0 in the inner part of the Amazon Rainforest.  For further details, assuming that rainfall is more useful during the vegetative season which corresponds to the most rainy months of year, the analysis is replied using the mean monthly precipitation of the 3 most rainy months per each year. The aggregation is done by inserting this new aggregation function as _FUN_ argument of the _rasterList_ function: 
 ```{r eval=TRUE,fig.width=7}
 
 prec_rank <- rasterList(prec,FUN=function(x,years,xnum){
@@ -473,7 +477,7 @@ leaf_trend <- leaf %>% addRasterImage(r,opacity=opacity,color=color) %>% addLege
 leaf_trend %>% addMarkers(lng=pts$lon,lat=pts$lat,label=sprintf("%10.2f mm/year at %s",r[pts$icell], pts$label))
 ```
 
-The behaviour of mean monthly precipitation within the rainy season is similar to the behaviour of the total annual precipitation. Trends, where significantly exist, are not very high. However, mean monthly precipitation within the rainy season an indicator of rain water availablity for agriculture during the growing season.  In the following, both annual mean precipitation and mean monthly precipitation within the rainy season are rescaled and carried out homogenized with the reference to the conditional expected value of the last year of the time series, i.e. 2017, in order that the time series values are assumed to be independent and identically distributed:
+The behavior of mean monthly precipitation within the rainy season is similar to the behavior of the total annual precipitation. Trends, where significantly exist, are not very high. However, mean monthly precipitation within the rainy season an indicator of rain water availability for agriculture during the growing season.  In the following, both annual mean precipitation and mean monthly precipitation within the rainy season are rescaled and carried out homogenized with the reference to the conditional expected value of the last year of the time series, i.e. 2017, in order that the time series values are assumed to be independent and identically distributed:
 ```{r eval=TRUE,fig.width=7}
   
   years <- as.numeric(str_replace(names(prec_sum),"X",""))
@@ -481,7 +485,7 @@ The behaviour of mean monthly precipitation within the rainy season is similar t
   prec_sum_res <- prec_sum-stack(lapply(X=(years-years_max),FUN="*",prec_sum_sens_slope_trend))
   prec_rank_mean_res <- prec_rank_mean-stack(lapply(X=(years-years_max),FUN="*",prec_rank_mean_sens_slope_trend))
 ```
-Subsequently, package __RasterList__ allows further analysis to assess the return periods of a specific scanario or a critical event (e.g. an extreme event). Through the L-Momoments (@hosking1997chap2)  a parametric probability distribution of precipitation is fitted for each raster cell. The function _samlmu_ of __lmom__ package (@lmom) is used to calculate the L-Moments of a generic time series. Precipitation variable sample is fitted with a Pearson Type III and a Gumbel Extreme Value probability distributions (@lmom,@lmomPi), then the fit per each distribution is verified through a Kolgomorov-Smirnov statistical test (e.g. the _ks.test_ function, @Marsaglia2003). In the following chunck of code, this procedure is applied to the variable *prec_rank_mean_res* for one of the check points:
+Subsequently, package __RasterList__ allows further analysis to assess the return periods of a specific scanario or a critical event (e.g. an extreme event). Through the L-Moments (@hosking1997chap2)  a parametric probability distribution of precipitation is fitted for each raster cell. The function _samlmu_ of __lmom__ package (@lmom) is used to calculate the L-Moments of a generic time series. Precipitation variable sample is fitted with a Pearson Type III and a Gumbel Extreme Value probability distributions (@lmom,@lmomPi), then the fit per each distribution is verified through a Kolgomorov-Smirnov statistical test (e.g. the _ks.test_ function, @Marsaglia2003). In the following chuck of code, this procedure is applied to the variable *prec_rank_mean_res* for one of the check points:
 ```{r eval=TRUE,fig.width=7}
   library(lmomPi)
   prec_m_ts <- prec_rank_mean_res[pts$icell[1]]
@@ -494,11 +498,11 @@ Subsequently, package __RasterList__ allows further analysis to assess the retur
   }
   ks
 ```
-The procedure  is therefore replied at a raster scale (for each pixel of the raster) by defining and creating the following structures:
-== _samlmom_ a _RasterStack-class_ Object containing L-Momnts for each pixel;
+The procedure  is therefore replicated at a raster scale (for each pixel of the raster) after defining and creating the following structures:
+== _samlmom_ a _RasterStack-class_ Object containing L-Moments for each pixel;
 == _fitdist_ a _RasterList-class_ object describing the probability distribution for each pixel with its parameters;
 == _kstesting_, a _RasterList-class_ containing the output of the Kolgomorov-Smirnov Goodness-of-fit test for each pixel.
-These objects are repliceted for everery hypothetical probability distrubition.
+These objects are built for each hypothetical probability distribution.
 ```{r eval=TRUE,fig.width=7,warning=FALSE}
 samlmom <- stack(rasterList(prec_rank_mean_res,FUN=samlmu,ratios=TRUE))
 ## This is a correction
@@ -515,7 +519,7 @@ for (it in distrib) {
 kstesting[["pe3"]]@list[[pts$icell[1]]]  
 
 ```
-THe mapping of _p.value_ is useful to assess where the null hypothesis (e.g. the probability distrubution) can be accepted or not. Both selected probability distributions can be accepted for all raster cells.
+Mapping  _p.value_ is useful to assess where the null hypothesis (e.g. the probability distrubution, in this case) can be accepted or not. Both selected probability distributions can be accepted for all raster cells.
 ```{r eval=TRUE,fig.width=7}
   pval_ks <- list()
   pval_ks[["pe3"]] <- raster(kstesting[["pe3"]],FUN=function(x){x$p.value})
@@ -530,7 +534,7 @@ THe mapping of _p.value_ is useful to assess where the null hypothesis (e.g. the
   pval_ks[["gev"]] 
 
 ```
-Return period is  the expected time interval between two events where precipitation is lower than a certain threshold value. Return periods are a measure of the frequency at which specific events occurs. Since the object is to analyze the meteorological drought (i.e. lack of rainfall), return periods are the inverse of quantiles associeted to a precipitation lower that the mapped value. Under the hypothesis that the probability distribution is Pearson III type (i.e. _pe3_), return periods are calculated as follows:
+Return period is  the expected time interval between two events where precipitation is lower than a certain threshold value. Return periods reveals the frequency at which specific events occurs. Since the object is to be analyze the meteorological drought (i.e. lack of rainfall), return periods are the inverse of quantiles associated to a precipitation lower that the mapped value. Under the hypothesis that the probability distribution is Pearson III type (i.e. _pe3_), return periods are calculated as follows:
 ```{r eval=TRUE,fig.width=7,warning=TRUE} 
 return_periods <- c(5,10,20,50,100) 
 frq= 1/return_periods
@@ -543,7 +547,7 @@ percentiles <-  stack(fitdist[["pe3"]],FUN=function(p,frq) {
    },frq=frq)
 
 ```
-Finally, here is a visualization of the value of mean monthly precitation in the 3 most rainy months of the year that is not reached with a return period of 20 years:
+Finally, here is a visualization of the value of mean monthly precipitation in the 3 most rainy months of the year that is not reached with a return period of 20 years:
 ```{r eval=TRUE,fig.width=7,warning=FALSE,ercho=FALSE,message=FALSE}
 r <-  percentiles[["T20"]]
 rp <- r
@@ -570,9 +574,9 @@ The user can rerun the code to map other percentiles related to other return per
 
 ## Conclusions
 
-The above applications illustrate how statistical analysis and other processing may be replicated at every cell of a raster map. The __rasterList__ package has been created to answer the need to make complex operation on spatially gridded region. The shown examples go beyond their own task but they have the task of teaching the most important functions of the package and therefore how to make use of the package. 
+The above applications illustrate how statistical analysis and other processing can be applied to every cell of a raster map. The __rasterList__ package has been created to answer the need to make complex operation on spatially gridded region. The shown examples go beyond their own task but they have the task of teaching the most important functions of the package and therefore how to make use of the package. 
 __rasterList__ is able to save different type of objects within a cell of the raster map and allows that each object of a raster cell may be transformed and/or coerced to another object. Two or more _RasterList-class_ objects can interact through operations with one another.
-This is of great relevance because it allows to save intermediate steps during a processing workflow (e.g. statistical analysis).
+This is of great relevance because it allows to save intermediate steps during a processing workflow (e.g. a detailed statistical analysis).
 
 ## References 
 

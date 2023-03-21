@@ -12,6 +12,9 @@ library(soilwater)
 library(stringr)
 soilparcsv <- system.file("external/soil_data.csv",package="soilwater")
 soilpar <- read.table(soilparcsv,stringsAsFactors=FALSE,header=TRUE,sep=",")
+knitr::kable(soilpar,caption="Average value of Van Genuchten's parameter per each soil type")
+
+## ----eval=TRUE,fig.width=7----------------------------------------------------
 soilpar$color <- str_sub(rainbow(nrow(soilpar)),end=7)  ## Only first 7 characters of HTML code is considered.
 
 ## ----eval=TRUE,fig.width=7----------------------------------------------------
@@ -190,7 +193,8 @@ precf <- '/home/ecor/local/rpackages/jrc/rasterList/inst/map/cajamarca_monthly_p
 
 prec0 <- stack(precf0)
 prec <- aggregate(prec0,fact=2,na.rm=TRUE,fun=mean,filename=precf,overwrite=TRUE)
-
+####
+precf <- system.file("map/cajamarca_monthly_precipitation.grd", package="rasterList")
 
 
 ## ----eval=TRUE,fig.width=7,warning=FALSE,message=FALSE------------------------
