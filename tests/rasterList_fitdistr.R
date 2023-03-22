@@ -6,7 +6,7 @@ rm(list=ls())
 
 library(rasterList)
 library(lmom)
-
+library(lubridate)
 
 
 ## TESTING R CODE: 
@@ -32,7 +32,7 @@ pval <- raster(pvalf)
 ## Set time
 
 time <- as.Date(names(prec),format="X%Y.%m.%d")
-year <- as.character(time,format="X%Y")
+year <- year(time) ##as.character(time,format="X%Y")
 
 ## Compute Annual Precipitation (sum aggregration)
 yearlyprec <- stackApply(x=prec,fun=sum,indices=year)

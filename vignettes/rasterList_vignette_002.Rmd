@@ -28,13 +28,13 @@ knitr::opts_chunk$set(
 
 
 The __rasterList__ package has been developed to create a S4 class object that can manage complex
-operations and objects in a spatially gridded map, i.e. a raster map. The _rasterList-Class_ (@rasterList) object differs from a traditional raster map by the fact that each cell can contain a generic object instead of numeric values on one or more  bands or layers. The raster of objects,i.e. the RasterList-Class object, consits on a _rasterLayer-Class_  (@raster) connected to a generic list: one list element for each raster cells. It allows to write few lines of R code for complex  map algebra. Furthermore, in accordance with the existing classes defined in the R environment, each cell of the raster is "occupied" by an an istanced object. This may be of big utility  in most applications, e.g. environmental modelig. 
+operations and objects in a spatially gridded map, i.e. a raster map. The _rasterList-Class_ (@rasterList) object differs from a traditional raster map by the fact that each cell can contain a generic object instead of numeric values on one or more  bands or layers. The raster of objects,i.e. the RasterList-Class object, consists on a _rasterLayer-Class_  (@raster) connected to a generic list: one list element for each raster cells. It allows to write few lines of R code for complex  map algebra. Furthermore, in accordance with the existing classes defined in the R environment, each cell of the raster is "occupied" by an an istanced object. This may be of big utility  in most applications, e.g. environmental modeling. 
 
 ## Introduction
 
 Nowadays the availability of spatially gridded coverages , often obtained by distributed biophysical/environmental models or remote sensed observations (e. g. CHIRPS rainfall (@chirps2015)), leads to the fact  that  normal operations on time series analysis and statistics must be replicated  in each pixel or cell of the spatially gridded domain (raster). 
 Based on _raster_ package (@raster), a S4 class has been created such that results of complex operations or speficfic R (e.g, S3 or S4)  objects can be executed on each cells of a raster map. The raster of objects contains the traditional raster map with the addition of a list of generic objects: one
-object for each raster cells. In such a way,  different kinds of objects, e.g. the probability distrubution of the mapped random variable or an _htest_, _lm_ ,_glm_ or _function_ class objects (@Hastie1992a,@Hastie1992b), can be saved for each cell, in order that the user can save intermediate results without loosing any  geographic information. This new object class  is implemented in a new package __RasterList__. Two  applications are  presented: 
+object for each raster cells. In such a way,  different kinds of objects, e.g. the probability distribution of the mapped random variable or an _htest_, _lm_ ,_glm_ or _function_ class objects (@Hastie1992a,@Hastie1992b), can be saved for each cell, in order that the user can save intermediate results without loosing any  geographic information. This new object class  is implemented in a new package __RasterList__. Two  applications are  presented: 
 
  * Creation of a 2D/3D modeled map of  soil water retention curve based on existing soil properties map and state-of-art empirical formulation (e.g. @VanGenuchten1980);
  * Processing spatial gridded datasets of daily or monthly precipitation (e. g. @chirps2015) for a trend or frequancy analysis (estimation of the return period of critical events).
@@ -255,21 +255,21 @@ This application consists on an a time series analysis for each cell of a raster
 The area has a subtropical highland climate (_Cwb_, in the Köppen climate classification) which is characteristic of high elevations at tropical latitudes. The region presents a semi-dry, temperate, semi-cold climate with presence of rainfall mostly on spring and summer (from October to March) with little or no rainfall the rest of the year. The western part of the study region is  includes the Amazon Rainforest, one of the richest area in the world of biodiversity and water. This area is more rainy during all year than the part in the highlands. Anyway, the climate of the area is sensitive to ENSO oscillations. 
 Anyway,  the aim of this application is the creation of a work flow that can be applied to other areas of the world. 
 The object of this session is a trend and raturn-period analysis of yearly aggregated precipitation starting from spatio-temporal gridded datasets available.   
-As input data, monthly precipitation rasters taken from the  Climate Hazards Group InfraRed Precipitation with Station dataset (CHIRPS) (@chirps2015) have been used. CHIRPS is  is a 30+ year quasi-global rainfall dataset. The spatial coverage spans all longitudes between the latitudes -50 degrees (Southern Emisphere) and  50 degrees (Northern Emisphere), starting in 1981 to near-present. CHIRPS incorporates 0.05 degree  resolution satellite imagery with in-situ station data to create gridded rainfall time series for trend analysis and seasonal drought monitoring. 
+As input data, monthly precipitation rasters taken from the  Climate Hazards Group InfraRed Precipitation with Station dataset (CHIRPS) (@chirps2015) have been used. CHIRPS is  is a 30+ year quasi-global rainfall dataset. The spatial coverage spans all longitudes between the latitudes -50 degrees (Southern Hemisphere) and  50 degrees (Northern Hemisphere), starting in 1981 to near-present. CHIRPS incorporates 0.05 degree  resolution satellite imagery with in-situ station data to create gridded rainfall time series for trend analysis and seasonal drought monitoring. 
 
 ```{r eval=TRUE,echo=TRUE}
 library(rasterList)
 ##precf <- system.file("map/Mekrou_precipitation.grd", package="rasterList")
 #precf <- system.file("map/cajamarca_monthly_precipitation.grd", package="rasterList")
 ##
-precf0 <- '/home/ecor/local/rpackages/jrc/rasterList_doc/map/cajamarca_monthly_precipitation_vL.grd'
-precf <- '/home/ecor/local/rpackages/jrc/rasterList/inst/map/cajamarca_monthly_precipitation_vL2.grd'
+##precf0 <- '/home/ecor/local/rpackages/jrc/rasterList_doc/map/cajamarca_monthly_precipitation_vL.grd'
+##precf <- '/home/ecor/local/rpackages/jrc/rasterList/inst/map/cajamarca_monthly_precipitation_vL2.grd'
 
-prec0 <- stack(precf0)
-prec <- aggregate(prec0,fact=2,na.rm=TRUE,fun=mean,filename=precf,overwrite=TRUE)
+##prec0 <- stack(precf0)
+##prec <- aggregate(prec0,fact=2,na.rm=TRUE,fun=mean,filename=precf,overwrite=TRUE)
 ####
-precf <- system.file("map/cajamarca_monthly_precipitation.grd", package="rasterList")
-
+precf <- system.file("map/cajamarca_monthly_precipitation_vL2.grd", package="rasterList")
+prec <- stack(precf)
 ```
 Total annual precipitation can be computed through an aggregation of monthly data with a _sum_ function aggregation and _lubridate_ package (@lubridate).
 ```{r eval=TRUE,fig.width=7,warning=FALSE,message=FALSE}
