@@ -18,6 +18,8 @@ NULL
 #' 
 #' @details The argument \code{FUN} is useful to create or transform \code{\link{RasterList-class}} from other Raster* classes. 
 #' 
+#' @return a \code{\link{RasterList-class}} object. 
+#' 
 #' @importFrom raster ncell raster nlayers 
 #' @importFrom methods as
 #' 
