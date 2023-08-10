@@ -2,7 +2,7 @@
 # 
 # Author: Emanuele Cordano
 ###############################################################################
-rm(list=ls())
+###rm(list=ls())
 
 library(rasterList)
 library(lmom)
