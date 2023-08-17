@@ -5,6 +5,14 @@
 ###rm(list=ls())
 
 library(rasterList)
+###
+condpkgs <- requireNamespace("lmom",quietly=TRUE)
+condpkgs <- condpkgs  & requireNamespace("testthat",quietly=TRUE)
+condpkgs <- condpkgs  & requireNamespace("lubridate",quietly=TRUE)
+
+if (condpkgs) {
+###
+
 library(lmom)
 library(lubridate)
 
@@ -80,6 +88,10 @@ test0 <- rep(0,length(test))
 #
 #####
 test_that(desc="Testing final Results",code=expect_equal(test,test0, tolerance = .002, scale = 1))
+
+}
+
+
 
 #
 #fitPrec <- rasterList(samlmom,FUN=function(x,pels=pels) {

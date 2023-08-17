@@ -40,22 +40,27 @@ NULL
 #' ## record for monitoring extremes". Scientific Data 2, 150066. doi:10.1038/sdata.2015.66 2015. 
 #' ## http://chg.geog.ucsb.edu/data/chirps/
 #' ##
-#' 
-#' 
+#' \dontrun{
+#' if (requireNamespace("lmom",quietly = TRUE) & requireNamespace("lubridate",quietly = TRUE)) {
 #' ## Sample L-moments
 #'  library(lmom)
-#' \dontrun{
+#'  library(lubridate)
+#'  
 #' prec <- stack(precf)
 #' samlmom <- stack(rasterList(prec,FUN=samlmu))
 #' ## Fitting a Random Probability Distribution: it is a 'rasterList' Object
 #' fitdist <- rasterList(samlmom,FUN=pelgam)
 #' }
+#' }
 #' 
+#' if (requireNamespace("lmom",quietly = TRUE) & requireNamespace("lubridate",quietly = TRUE)) {
+#' library(lmom)
+#' library(lubridate)
 #' precf <- system.file("map/Mekrou_precipitation.grd", package="rasterList")
 #' prec <- stack(precf)
 #'  # Set time
 #' time <- as.Date(names(prec),format="X%Y.%m.%d")
-#' year <- as.character(time,format="X%Y")
+#' year <- sprintf("X%04d",lubridate::year(time)) ##as.character(time,format="X%Y")
 #' 
 #' ## Compute Annual Precipitation (sum aggregration)
 #' yearlyprec <- stackApply(x=prec,fun=sum,indices=year)
@@ -63,6 +68,7 @@ NULL
 #' samlmom <- stack(rasterList(yearlyprec,FUN=samlmu))
 #' fitdist <- rasterList(samlmom,FUN=pelgam)
 #' 
+#' }
 #' 
 
 

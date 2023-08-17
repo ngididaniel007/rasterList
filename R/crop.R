@@ -26,7 +26,7 @@ NULL
 #' prec <- stack(precf)
 #' \donttest{
 #' ## Sample L-moments 
-#' 
+#' if (requireNamespace("lmom",quietly = TRUE)) {
 #' library(lmom)
 #' 
 #' samlmom <- stack(rasterList(prec,FUN=samlmu))
@@ -39,6 +39,7 @@ NULL
 #' 
 #' 
 #' fitdist_masked <- crop ( x = fitdist,y=mask)
+#' }
 #' }
 #' 
 #' 

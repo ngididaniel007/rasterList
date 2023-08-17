@@ -29,7 +29,7 @@ precf <- system.file("map/Mekrou_precipitation.grd", package="rasterList")
 prec <- stack(precf)
 \donttest{
 ## Sample L-moments 
-
+if (requireNamespace("lmom",quietly = TRUE)) {
 library(lmom)
 
 samlmom <- stack(rasterList(prec,FUN=samlmu))
@@ -42,6 +42,7 @@ mask <-raster( extent(fitdist)/4 )
 
 
 fitdist_masked <- crop ( x = fitdist,y=mask)
+}
 }
 
 

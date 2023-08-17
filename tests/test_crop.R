@@ -5,6 +5,14 @@
 ###rm(list=ls())
 
 library(rasterList)
+
+###
+condpkgs <- requireNamespace("lmom",quietly=TRUE)
+condpkgs <-  condpkgs & requireNamespace("testthat",quietly=TRUE)
+
+
+if (condpkgs) {
+
 library(lmom)
 
 
@@ -40,3 +48,4 @@ fitdist_crop <- rasterList(samlmom_crop,FUN=pelgam)
 
 test_that(desc="Testing final Results",code=expect_equal(fitdist_crop@list,fitdist_masked@list, tolerance = .002, scale = 1))
 test_that(desc="Testing final Results",code=expect_equal(fitdist_crop@extent,fitdist_masked@extent, tolerance = .002, scale = 1))
+}

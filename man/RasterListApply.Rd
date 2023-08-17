@@ -30,6 +30,8 @@ rm <- RasterListApply(x=ra,y=rb,z=10,FUN=function(x,y,z){x+y+z})
 
 ### Fitting a probability distribution for precipitation 
 ### in each cell with "lmon" package (L Moments) 
+
+if (requireNamespace("lmom",quietly = TRUE)) {
 library(lmom)
 
 
@@ -55,6 +57,9 @@ kstesting <- RasterListApply(x=rasterList(prec),y="cdfgam",para=fitdist,FUN=ks.t
 
 ## Mapping of p-value 
 pval_ks <- raster(kstesting,FUN=function(x){x$p.value})
+
+}
+
 }
 \seealso{
 \code{\link{mapply}},\code{\link{rasterList}}

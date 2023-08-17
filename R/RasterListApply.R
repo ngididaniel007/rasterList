@@ -27,6 +27,8 @@ NULL
 #' 
 #' ### Fitting a probability distribution for precipitation 
 #' ### in each cell with "lmon" package (L Moments) 
+#' 
+#' if (requireNamespace("lmom",quietly = TRUE)) {
 #' library(lmom)
 #' 
 #' 
@@ -52,7 +54,9 @@ NULL
 #' 
 #' ## Mapping of p-value 
 #' pval_ks <- raster(kstesting,FUN=function(x){x$p.value})
-
+#'
+#' }
+#'
 RasterListApply <- function(...,FUN=NULL) {
 	
     ## TO DO ....
